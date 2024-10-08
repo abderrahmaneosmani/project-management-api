@@ -9,4 +9,6 @@ export class CreateProductDto {
   price: number;
   @ApiProperty()
   stock_quantity: number;
+  @ApiProperty()
+  category: string;
 }

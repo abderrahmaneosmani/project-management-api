@@ -15,8 +15,13 @@ export class CategoriesService {
     return category.save();
   }
 
-  findAll() {
-    return this.categoryModel.find().exec();
+  async findAll() {
+    const categories = await this.categoryModel
+      .find()
+      .populate('products')
+      .exec();
+
+    return categories;
   }
 
   findOne(id: number) {
