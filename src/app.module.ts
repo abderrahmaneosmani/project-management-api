@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { UsersModule } from './users/users.module';
 import mongoose from 'mongoose';
 
 @Module({
@@ -11,6 +12,7 @@ import mongoose from 'mongoose';
     MongooseModule.forRoot('mongodb://127.0.0.1:27017/management'),
     ProductsModule,
     CategoriesModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
