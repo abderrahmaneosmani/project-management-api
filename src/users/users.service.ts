@@ -30,10 +30,6 @@ export class UsersService {
     return `This action removes a #${id} user`;
   }
   async findUserByEmail(email: string) {
-    return await this.userModel
-      .findOne({
-        email,
-      })
-      .exec();
+    return this.userModel.findOne({ email }).lean().exec();
   }
 }
