@@ -1,22 +1,39 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './guards/local.auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { LoginDto } from './dto/auth.dto';
+import { Public } from './decorator/public';
+import { Request } from 'express';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('login')
-  login(@Request() req) {
-    return this.authService.login(req.user);
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtRefreshGuard)
+  @Get('logout')
+  logout(@Req() req: Request) {
+    console.log('req', req.user);
+    return this.authService.logout(req.user['sub']);
+  }
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req) {
     return req.user;
+  }
+  @UseGuards(JwtRefreshGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: Request) {
+    const userId: string = req.user['sub'];
+
+    console.log('us id', userId);
+
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshToken(userId, refreshToken);
   }
 }

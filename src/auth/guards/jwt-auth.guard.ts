@@ -17,6 +17,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getHandler(),
       context.getClass(),
     ]);
+    const request = context.switchToHttp().getRequest();
+    const url: string = request.url;
+
+    if (url === '/auth/refresh' || url === '/auth/logout') {
+      return true;
+    }
+
+    console.log('end');
+
     if (isPublic) {
       return true;
     }
@@ -24,7 +33,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err, user) {
-    // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException();
     }

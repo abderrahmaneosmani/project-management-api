@@ -9,6 +9,8 @@ export class User {
   email: string;
   @Prop({ required: true })
   password: string;
+  @Prop()
+  refreshToken: string;
 }
 export type UserDocument = Document & User;
 export const UserSchema = SchemaFactory.createForClass(User);
