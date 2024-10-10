@@ -16,8 +16,6 @@ export class UsersService {
     const { role, ...userDto } = createUserDto;
 
     const roleDocument = await this.roleService.findByCode(role);
-    console.log('role', roleDocument);
-    console.log('role', role);
 
     if (!roleDocument) {
       throw new BadRequestException(`Role with code "${role}" not found`);
@@ -47,10 +45,10 @@ export class UsersService {
       .exec();
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
   async findUserByEmail(email: string) {
-    return this.userModel.findOne({ email }).lean().exec();
+    return this.userModel.findOne({ email }).populate('role').lean().exec();
   }
 }

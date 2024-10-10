@@ -9,7 +9,6 @@ import {
   TIME_REFRESH,
   TIME_TOKEN,
 } from 'src/config-var';
-import { Role } from 'src/role/role.enum';
 dotenv.config();
 
 @Injectable()
@@ -28,12 +27,16 @@ export class AuthService {
     return null;
   }
 
-  async generateAccessTokenRefreshToken(sub: string, username: string) {
+  async generateAccessTokenRefreshToken(
+    sub: string,
+    username: string,
+    role: string,
+  ) {
     const accessToken = await this.jwtService.signAsync(
       {
         username,
         sub,
-        role: Role.Admin,
+        role: role,
       },
       {
         expiresIn: TIME_TOKEN,
@@ -60,6 +63,7 @@ export class AuthService {
       await this.generateAccessTokenRefreshToken(
         checkUser._id,
         checkUser.username,
+        checkUser.role.code,
       );
     await this.userService.update(checkUser._id, { refreshToken });
 
@@ -86,7 +90,11 @@ export class AuthService {
     }
 
     const { refreshToken, accessToken } =
-      await this.generateAccessTokenRefreshToken(id, checkUser.username);
+      await this.generateAccessTokenRefreshToken(
+        id,
+        checkUser.username,
+        checkUser.role.code,
+      );
     await this.userService.update(id, {
       refreshToken: refreshToken,
     });

@@ -9,6 +9,11 @@ import {
   CategoryDocument,
 } from 'src/categories/schema/category.schema';
 
+export interface ProductFilterOptions {
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
 @Injectable()
 export class ProductsService {
   constructor(
@@ -37,10 +42,34 @@ export class ProductsService {
       { $push: { products: saveProduct } },
       { new: true, useFindAndModify: false },
     );
+    return saveProduct;
   }
 
-  findAll() {
-    return this.productModel.find().exec();
+  async findAll(filterOptions?: ProductFilterOptions) {
+    let query = this.productModel.find();
+
+    if (filterOptions) {
+      const categoryName = filterOptions.category;
+      if (categoryName) {
+        const category = await this.categoryModel.findOne({
+          name: categoryName,
+        });
+        if (category) {
+          query = query.where('category').equals(category._id);
+        } else {
+          return [];
+        }
+      }
+
+      if (filterOptions.minPrice !== undefined) {
+        query = query.where('price').gte(filterOptions.minPrice);
+      }
+      if (filterOptions.maxPrice !== undefined) {
+        query = query.where('price').lte(filterOptions.maxPrice);
+      }
+    }
+
+    return query.exec();
   }
 
   findOne(id: string) {

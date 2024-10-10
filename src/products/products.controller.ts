@@ -6,11 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductFilterOptions, ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/role/decorator/role.decorator';
 import { Role } from 'src/role/role.enum';
 
@@ -27,8 +28,11 @@ export class ProductsController {
 
   @Roles(Role.Admin, Role.Manager, Role.User)
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  @ApiQuery({ name: 'category', required: false, type: String })
+  @ApiQuery({ name: 'minPrice', required: false, type: Number })
+  @ApiQuery({ name: 'maxPrice', required: false, type: Number })
+  findAll(@Query() filterOptions: ProductFilterOptions) {
+    return this.productsService.findAll(filterOptions);
   }
   @Roles(Role.Admin, Role.Manager, Role.User)
   @Get(':id')
