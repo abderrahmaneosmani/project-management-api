@@ -6,6 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
 import mongoose from 'mongoose';
 
 @Module({
@@ -15,6 +16,7 @@ import mongoose from 'mongoose';
     CategoriesModule,
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
 
   controllers: [AppController],

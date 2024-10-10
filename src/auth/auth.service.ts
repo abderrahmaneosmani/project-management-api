@@ -33,7 +33,7 @@ export class AuthService {
       {
         username,
         sub,
-        roles: Role.Admin,
+        role: Role.Admin,
       },
       {
         expiresIn: TIME_TOKEN,

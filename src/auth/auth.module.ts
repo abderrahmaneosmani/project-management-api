@@ -22,7 +22,7 @@ import { RolesGuard } from 'src/role/guard/roles.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard, // Then apply Roles guard
+      useClass: RolesGuard,
     },
   ],
 
