@@ -17,6 +17,14 @@ export class UsersService {
     const { role, ...userDto } = createUserDto;
 
     const roleDocument = await this.roleService.findByCode(role);
+    const existUser = await this.userModel.findOne({
+      $or: [{ username: userDto.username }, { email: userDto.email }],
+    });
+    if (existUser) {
+      throw new BadRequestException(
+        'User with this email or username already exists',
+      );
+    }
 
     if (!roleDocument) {
       throw new BadRequestException(`Role with code "${role}" not found`);
