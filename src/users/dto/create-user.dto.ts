@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -11,8 +11,9 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   password: string;
+  @IsOptional()
   @IsString()
   refreshToken: string;
-  @ApiProperty({ description: 'Role code (e.g., admin, user, etc.)' })
-  role: string; // Accept role as a code (string) like "admin"
+  @ApiProperty()
+  role: string;
 }
