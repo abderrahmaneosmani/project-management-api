@@ -9,10 +9,29 @@ async function bootstrap() {
     .setTitle('management-api')
     .setDescription('api for management')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      security: [
+        {
+          'JWT-auth': [],
+        },
+      ],
+    },
+  });
   await app.listen(3000);
 }
 bootstrap();
