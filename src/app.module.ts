@@ -16,6 +16,7 @@ import mongoose from 'mongoose';
     UsersModule,
     AuthModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })

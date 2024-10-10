@@ -9,6 +9,7 @@ import {
   TIME_REFRESH,
   TIME_TOKEN,
 } from 'src/config-var';
+import { Role } from 'src/role/role.enum';
 dotenv.config();
 
 @Injectable()
@@ -32,6 +33,7 @@ export class AuthService {
       {
         username,
         sub,
+        roles: Role.Admin,
       },
       {
         expiresIn: TIME_TOKEN,
