@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schema/user.schema';
 import { Model } from 'mongoose';
 import { RolesService } from 'src/roles/roles.service';
+import { cryptPassword } from 'src/utils/crypt';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +21,8 @@ export class UsersService {
     if (!roleDocument) {
       throw new BadRequestException(`Role with code "${role}" not found`);
     }
+    const hashPass = await cryptPassword(userDto.password);
+    userDto.password = hashPass;
     const newUser = new this.userModel({
       ...userDto,
       role: roleDocument._id,

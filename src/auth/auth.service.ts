@@ -9,6 +9,7 @@ import {
   TIME_REFRESH,
   TIME_TOKEN,
 } from 'src/config-var';
+import { verifyPassword } from 'src/utils/crypt';
 dotenv.config();
 
 @Injectable()
@@ -59,6 +60,14 @@ export class AuthService {
   async login(user: any) {
     const checkUser: any = await this.userService.findUserByEmail(user.email);
 
+    const isMatchPassword = await verifyPassword(
+      user.password,
+      checkUser.password,
+    );
+
+    if (!isMatchPassword) {
+      throw new ForbiddenException('Cant access');
+    }
     const { refreshToken, accessToken } =
       await this.generateAccessTokenRefreshToken(
         checkUser._id,
