@@ -2,12 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
-import {
-  SECRET_REFRESH,
-  SECRET_TOKEN,
-  TIME_REFRESH,
-  TIME_TOKEN,
-} from 'src/config-var';
+
 import { verifyPassword } from 'src/utils/crypt';
 dotenv.config();
 
@@ -30,8 +25,8 @@ export class AuthService {
         role: role,
       },
       {
-        expiresIn: TIME_TOKEN,
-        secret: SECRET_TOKEN,
+        expiresIn: process.env.TIME_TOKEN,
+        secret: process.env.SECRET_TOKEN,
       },
     );
     const refreshToken = await this.jwtService.signAsync(
@@ -40,8 +35,8 @@ export class AuthService {
         sub: sub,
       },
       {
-        secret: SECRET_REFRESH,
-        expiresIn: TIME_REFRESH,
+        secret: process.env.SECRET_REFRESH,
+        expiresIn: process.env.TIME_REFRESH,
       },
     );
 

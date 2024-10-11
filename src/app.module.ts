@@ -10,16 +10,22 @@ import { RolesModule } from './roles/roles.module';
 import { MigrationService } from './migration/migration.service';
 import { MigrationModule } from './migration/migration.module';
 import mongoose from 'mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/management'),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
     ProductsModule,
     CategoriesModule,
     UsersModule,
+
     AuthModule,
     RolesModule,
     MigrationModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
   ],
 
   controllers: [AppController],

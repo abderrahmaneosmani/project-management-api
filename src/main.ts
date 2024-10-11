@@ -4,6 +4,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  console.log('edatnv', process.env.DATABASE_URL);
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
