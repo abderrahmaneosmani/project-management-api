@@ -12,6 +12,8 @@ export class Product {
   price: number;
   @Prop({ required: true })
   stock_quantity: number;
+  @Prop({ default: true })
+  active: boolean;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Category' })
   category: string;

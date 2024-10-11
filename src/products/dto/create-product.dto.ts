@@ -19,4 +19,5 @@ export class CreateProductDto {
   @IsString()
   @ApiProperty()
   category: string;
+  active: boolean;
 }

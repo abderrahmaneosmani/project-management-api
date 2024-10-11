@@ -72,15 +72,37 @@ export class ProductsService {
     return query.exec();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    const checkProduct = await this.productModel.findOne({
+      _id: id,
+      active: true,
+    });
+
+    if (!checkProduct) {
+      throw new NotFoundException(`the product ${id} not found`);
+    }
+    return checkProduct;
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    const updateProduct = await this.productModel
+      .findByIdAndUpdate(id, updateProductDto, { new: true })
+      .exec();
+
+    return updateProduct;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    const update = await this.productModel.findByIdAndUpdate(
+      id,
+      { active: false },
+      { new: true },
+    );
+
+    if (update) {
+      return `The product ${id} was successfully deactivated`;
+    } else {
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
   }
 }
