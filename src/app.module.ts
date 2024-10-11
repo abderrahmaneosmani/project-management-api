@@ -7,6 +7,8 @@ import { CategoriesModule } from './categories/categories.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
+import { MigrationService } from './migration/migration.service';
+import { MigrationModule } from './migration/migration.module';
 import mongoose from 'mongoose';
 
 @Module({
@@ -17,12 +19,15 @@ import mongoose from 'mongoose';
     UsersModule,
     AuthModule,
     RolesModule,
+    MigrationModule,
   ],
 
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MigrationService],
 })
 export class AppModule implements OnModuleInit {
+  constructor(private readonly migrationService: MigrationService) {}
+
   onModuleInit() {
     mongoose.connection.on('connected', () => {
       Logger.debug('Connected to MongoDB');
@@ -35,5 +40,7 @@ export class AppModule implements OnModuleInit {
     mongoose.connection.on('disconnected', () => {
       Logger.debug('Disconnected from MongoDB');
     });
+
+    this.migrationService.runMigration();
   }
 }

@@ -33,7 +33,7 @@ export class RolesController {
   @Roles(Role.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+    return this.rolesService.findOne(id);
   }
 
   @Roles(Role.Admin)

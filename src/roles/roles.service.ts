@@ -17,8 +17,14 @@ export class RolesService {
     return await this.roleModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  async findOne(id: string) {
+    const role = await this.roleModel.findOne({
+      id,
+    });
+    if (!role) {
+      throw new NotFoundException('role not found');
+    }
+    return;
   }
   async findByCode(code: string) {
     const roleDocument = await this.roleModel
