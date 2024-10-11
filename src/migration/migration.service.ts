@@ -34,6 +34,6 @@ export class MigrationService {
       });
     }
 
-    console.log('Migration completed.');
+    Logger.debug('Migration completed.');
   }
 }
