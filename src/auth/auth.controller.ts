@@ -5,6 +5,7 @@ import { LoginDto } from './dto/auth.dto';
 import { Public } from './decorator/public';
 import { Request } from 'express';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('auth')
 @ApiBearerAuth('JWT-auth')
@@ -17,11 +18,13 @@ export class AuthController {
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
-  @UseGuards(JwtRefreshGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('logout')
-  logout(@Req() req: Request) {
-    console.log('req', req.user);
-    return this.authService.logout(req.user['sub']);
+  logout(@Req() req) {
+    const res = this.authService.logout(req.user['sub']);
+    if (res) {
+      req.user = undefined;
+    }
   }
   @Get('profile')
   getProfile(@Req() req) {
@@ -31,8 +34,6 @@ export class AuthController {
   @Get('refresh')
   refreshTokens(@Req() req: Request) {
     const userId: string = req.user['sub'];
-
-    console.log('us id', userId);
 
     const refreshToken = req.user['refreshToken'];
     return this.authService.refreshToken(userId, refreshToken);

@@ -1,6 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { LoginDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import {
@@ -18,15 +17,6 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async validateUser(payload: LoginDto) {
-    const { email, password } = payload;
-    const user: any = await this.userService.findUserByEmail(email);
-    if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
 
   async generateAccessTokenRefreshToken(
     sub: string,
@@ -80,7 +70,8 @@ export class AuthService {
   }
   async logout(userId: string) {
     const user = await this.userService.update(userId, { refreshToken: null });
-    return user;
+    if (!user) throw new Error('error occur on logout');
+    return 'user logout';
   }
 
   async refreshToken(id: string, rt: string) {
@@ -93,7 +84,6 @@ export class AuthService {
       secret: process.env.SECRET_REFRESH,
     });
 
-    console.log('valid', validToken);
     if (!validToken) {
       throw new ForbiddenException('Cant access');
     }

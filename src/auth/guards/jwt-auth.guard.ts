@@ -20,7 +20,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
     const url: string = request.url;
 
-    if (url === '/auth/refresh' || url === '/auth/logout') {
+    if (url === '/auth/refresh') {
       return true;
     }
 
