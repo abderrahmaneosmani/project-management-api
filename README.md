@@ -1,18 +1,34 @@
-## Description
+**## Description**
 
-REST API to manage products, categories, and users.
+REST API for managing products, categories, and users.
 
-## Installation
+**## Installation**
 
-### Database
+**### Docker Compose**
 
-Install MongoDB on your machine and provide the MongoDB URI in the .env file.
+Ensure Docker is installed on your machine.
+
+To run the backend with Docker Compose, use:
+
+```bash
+$ docker compose up
+```
+
+**### Local Machine**
+
+To run the backend API on your local machine:
+
+1. Ensure Node.js is installed.
+
+**### Database**
+
+Install MongoDB and provide the MongoDB URI in the .env file.
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+**## Running the App**
 
 ```bash
 # development
@@ -25,30 +41,48 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Swagger API
+**## Swagger API**
+
 (http://localhost:3000/api)
 
-## Authentication
+**## Authentication**
 
+1. Navigate to the Swagger API and log in at:
 
-Navigate to the Swagger API and log in at:
 (http://localhost:3000/api/)
 
-Use these credentials:
+1. Use these credentials:
 
-Email: admin@mail.com
+Email: [admin@mail.com](mailto:admin@mail.com)
+
 Password: 123456
 
-Grab the token and insert it to authorize.
+1. Copy the access token and insert it in the "Authorize" section found in the top-right corner of the Swagger page.
 
-### Categories
-Navigate to categories and create a category.
+**### Categories**
 
-### Products
-Navigate to products and create a product.
+To create a category, you must provide an access token for a manager or admin role.
 
-### Roles
-Create roles with the following names:
+Navigate to the categories section and create a category.
+
+**### Products**
+
+To create a product, you must provide an access token for a manager or admin role.
+
+Navigate to the products section and create a product.
+
+(You must have a category before creating a product)
+
+**### Roles**
+
+To create a role, you must have admin credentials.
+
+Create roles with the following codes:
+
 - manager
 - client
 - admin (created on migration)
+
+**### Users**
+
+To create users, go to the user section. You must be logged in as an admin.
