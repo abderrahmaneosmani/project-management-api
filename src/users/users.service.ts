@@ -56,14 +56,14 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    try {
-      return await this.userModel
-        .findOne({ _id: id })
-        .populate('role')
-        .lean()
-        .exec();
-    } catch (error) {
-      throw new Error('error on find user by id');
+    const user = await this.userModel
+      .findOne({ _id: id })
+      .populate('role')
+      .lean()
+      .exec();
+
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
   }
 
@@ -78,22 +78,21 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    try {
-      const deleteUser = await this.userModel.findByIdAndDelete(id);
-      if (deleteUser) {
-        return `The User ${id} was successfully deleted`;
-      } else {
-        throw new NotFoundException(`User with id ${id} not found`);
-      }
-    } catch (error) {
-      throw new Error('Error on remove user  ');
+    const deleteUser = await this.userModel.findByIdAndDelete(id);
+    if (deleteUser) {
+      return `The User ${id} was successfully deleted`;
+    } else {
+      throw new NotFoundException(`User with id ${id} not found`);
     }
   }
   async findUserByEmail(email: string) {
-    try {
-      return this.userModel.findOne({ email }).populate('role').lean().exec();
-    } catch (error) {
-      throw new Error('Error finding user by email ');
+    const user = await this.userModel
+      .findOne({ email })
+      .populate('role')
+      .lean()
+      .exec();
+    if (!user) {
+      throw new Error(`user not found with ${email}`);
     }
   }
 }

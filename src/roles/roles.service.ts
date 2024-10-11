@@ -14,7 +14,9 @@ export class RolesService {
   }
 
   async findAll() {
-    return await this.roleModel.find().exec();
+    const roles = await this.roleModel.find().exec();
+    if (!roles) throw new Error('error occur on role');
+    return roles;
   }
 
   async findOne(id: string) {
@@ -24,7 +26,7 @@ export class RolesService {
     if (!role) {
       throw new NotFoundException('role not found');
     }
-    return;
+    return role;
   }
   async findByCode(code: string) {
     const roleDocument = await this.roleModel
@@ -33,6 +35,10 @@ export class RolesService {
       })
       .lean()
       .exec();
+
+    if (!roleDocument) {
+      throw new Error('error occur');
+    }
 
     return roleDocument;
   }

@@ -33,18 +33,14 @@ export class CategoriesService {
   }
 
   async findOne(id: string) {
-    try {
-      const checkCategory = await this.categoryModel.findOne({
-        _id: id,
-      });
+    const checkCategory = await this.categoryModel.findOne({
+      _id: id,
+    });
 
-      if (!checkCategory) {
-        throw new NotFoundException(`the category ${id} not found`);
-      }
-      return checkCategory;
-    } catch (error) {
-      throw new Error(error);
+    if (!checkCategory) {
+      throw new NotFoundException(`the category ${id} not found`);
     }
+    return checkCategory;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -60,15 +56,11 @@ export class CategoriesService {
   }
 
   async remove(id: string) {
-    try {
-      const deleteCategory = await this.categoryModel.findByIdAndDelete(id);
-      if (deleteCategory) {
-        return `The Category ${id} was successfully deleted`;
-      } else {
-        throw new NotFoundException(`Category with id ${id} not found`);
-      }
-    } catch (error) {
-      throw new Error(error);
+    const deleteCategory = await this.categoryModel.findByIdAndDelete(id);
+    if (deleteCategory) {
+      return `The Category ${id} was successfully deleted`;
+    } else {
+      throw new NotFoundException(`Category with id ${id} not found`);
     }
   }
 }

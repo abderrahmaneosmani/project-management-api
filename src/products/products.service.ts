@@ -77,19 +77,15 @@ export class ProductsService {
   }
 
   async findOne(id: string) {
-    try {
-      const checkProduct = await this.productModel.findOne({
-        _id: id,
-        active: true,
-      });
+    const checkProduct = await this.productModel.findOne({
+      _id: id,
+      active: true,
+    });
 
-      if (!checkProduct) {
-        throw new NotFoundException(`the product ${id} not found`);
-      }
-      return checkProduct;
-    } catch (error) {
-      throw new Error('error occur on server ');
+    if (!checkProduct) {
+      throw new NotFoundException(`the product ${id} not found`);
     }
+    return checkProduct;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -105,20 +101,16 @@ export class ProductsService {
   }
 
   async remove(id: string) {
-    try {
-      const update = await this.productModel.findByIdAndUpdate(
-        id,
-        { active: false },
-        { new: true },
-      );
+    const update = await this.productModel.findByIdAndUpdate(
+      id,
+      { active: false },
+      { new: true },
+    );
 
-      if (update) {
-        return `The product ${id} was successfully deactivated`;
-      } else {
-        throw new NotFoundException(`Product with id ${id} not found`);
-      }
-    } catch (error) {
-      throw new Error('error occured');
+    if (update) {
+      return `The product ${id} was successfully deactivated`;
+    } else {
+      throw new NotFoundException(`Product with id ${id} not found`);
     }
   }
 }
