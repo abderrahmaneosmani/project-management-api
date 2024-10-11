@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -24,15 +24,31 @@ export class CategoriesService {
     return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const checkCategory = await this.categoryModel.findOne({
+      _id: id,
+    });
+
+    if (!checkCategory) {
+      throw new NotFoundException(`the product ${id} not found`);
+    }
+    return checkCategory;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const updateCategory = await this.categoryModel
+      .findByIdAndUpdate(id, updateCategoryDto, { new: true })
+      .exec();
+
+    return updateCategory;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const deleteCategory = await this.categoryModel.findByIdAndDelete(id);
+    if (deleteCategory) {
+      return `The Category ${id} was successfully deleted`;
+    } else {
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
   }
 }

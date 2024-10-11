@@ -35,7 +35,7 @@ export class CategoriesController {
   @Roles(Role.Admin, Role.Manager, Role.User)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+    return this.categoriesService.findOne(id);
   }
   @Roles(Role.Admin, Role.Manager)
   @Patch(':id')
@@ -48,6 +48,6 @@ export class CategoriesController {
   @Roles(Role.Admin, Role.Manager)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+    return this.categoriesService.remove(id);
   }
 }
