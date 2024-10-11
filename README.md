@@ -1,10 +1,10 @@
-**## Description**
+## Description
 
 REST API for managing products, categories, and users.
 
-**## Installation**
+## Installation
 
-**### Docker Compose**
+### Docker Compose
 
 Ensure Docker is installed on your machine.
 
@@ -14,13 +14,13 @@ To run the backend with Docker Compose, use:
 $ docker compose up
 ```
 
-**### Local Machine**
+### Local Machine
 
 To run the backend API on your local machine:
 
 1. Ensure Node.js is installed.
 
-**### Database**
+### Database
 
 Install MongoDB and provide the MongoDB URI in the .env file.
 
@@ -28,7 +28,7 @@ Install MongoDB and provide the MongoDB URI in the .env file.
 $ npm install
 ```
 
-**## Running the App**
+## Running the App
 
 ```bash
 # development
@@ -41,11 +41,11 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-**## Swagger API**
+## Swagger API
 
 (http://localhost:3000/api)
 
-**## Authentication**
+## Authentication
 
 1. Navigate to the Swagger API and log in at:
 
@@ -59,13 +59,13 @@ Password: 123456
 
 1. Copy the access token and insert it in the "Authorize" section found in the top-right corner of the Swagger page.
 
-**### Categories**
+### Categories
 
 To create a category, you must provide an access token for a manager or admin role.
 
 Navigate to the categories section and create a category.
 
-**### Products**
+### Products
 
 To create a product, you must provide an access token for a manager or admin role.
 
@@ -73,7 +73,7 @@ Navigate to the products section and create a product.
 
 (You must have a category before creating a product)
 
-**### Roles**
+### Roles
 
 To create a role, you must have admin credentials.
 
@@ -83,6 +83,6 @@ Create roles with the following codes:
 - client
 - admin (created on migration)
 
-**### Users**
+### Users
 
 To create users, go to the user section. You must be logged in as an admin.
