@@ -11,44 +11,64 @@ export class CategoriesService {
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
   ) {}
   create(createCategoryDto: CreateCategoryDto) {
-    const category = new this.categoryModel(createCategoryDto);
-    return category.save();
+    try {
+      const category = new this.categoryModel(createCategoryDto);
+      return category.save();
+    } catch (error) {
+      throw new Error();
+    }
   }
 
   async findAll() {
-    const categories = await this.categoryModel
-      .find()
-      .populate('products')
-      .exec();
+    try {
+      const categories = await this.categoryModel
+        .find()
+        .populate('products')
+        .exec();
 
-    return categories;
+      return categories;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findOne(id: string) {
-    const checkCategory = await this.categoryModel.findOne({
-      _id: id,
-    });
+    try {
+      const checkCategory = await this.categoryModel.findOne({
+        _id: id,
+      });
 
-    if (!checkCategory) {
-      throw new NotFoundException(`the category ${id} not found`);
+      if (!checkCategory) {
+        throw new NotFoundException(`the category ${id} not found`);
+      }
+      return checkCategory;
+    } catch (error) {
+      throw new Error(error);
     }
-    return checkCategory;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    const updateCategory = await this.categoryModel
-      .findByIdAndUpdate(id, updateCategoryDto, { new: true })
-      .exec();
+    try {
+      const updateCategory = await this.categoryModel
+        .findByIdAndUpdate(id, updateCategoryDto, { new: true })
+        .exec();
 
-    return updateCategory;
+      return updateCategory;
+    } catch (error) {
+      throw Error(error);
+    }
   }
 
   async remove(id: string) {
-    const deleteCategory = await this.categoryModel.findByIdAndDelete(id);
-    if (deleteCategory) {
-      return `The Category ${id} was successfully deleted`;
-    } else {
-      throw new NotFoundException(`Category with id ${id} not found`);
+    try {
+      const deleteCategory = await this.categoryModel.findByIdAndDelete(id);
+      if (deleteCategory) {
+        return `The Category ${id} was successfully deleted`;
+      } else {
+        throw new NotFoundException(`Category with id ${id} not found`);
+      }
+    } catch (error) {
+      throw new Error(error);
     }
   }
 }

@@ -21,28 +21,32 @@ export class ProductsService {
     @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
   ) {}
   async create(createProductDto: CreateProductDto) {
-    const { category: categoryName, ...productDetails } = createProductDto;
+    try {
+      const { category: categoryName, ...productDetails } = createProductDto;
 
-    const category = await this.categoryModel
-      .findOne({ name: categoryName })
-      .exec();
+      const category = await this.categoryModel
+        .findOne({ name: categoryName })
+        .exec();
 
-    if (!category) {
-      throw new NotFoundException(`Category "${categoryName}" not found`);
+      if (!category) {
+        throw new NotFoundException(`Category "${categoryName}" not found`);
+      }
+
+      const product = new this.productModel({
+        ...productDetails,
+        category: category._id,
+      });
+
+      const saveProduct = await product.save();
+      await this.categoryModel.findByIdAndUpdate(
+        category._id,
+        { $push: { products: saveProduct } },
+        { new: true, useFindAndModify: false },
+      );
+      return saveProduct;
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const product = new this.productModel({
-      ...productDetails,
-      category: category._id,
-    });
-
-    const saveProduct = await product.save();
-    await this.categoryModel.findByIdAndUpdate(
-      category._id,
-      { $push: { products: saveProduct } },
-      { new: true, useFindAndModify: false },
-    );
-    return saveProduct;
   }
 
   async findAll(filterOptions?: ProductFilterOptions) {
@@ -73,36 +77,48 @@ export class ProductsService {
   }
 
   async findOne(id: string) {
-    const checkProduct = await this.productModel.findOne({
-      _id: id,
-      active: true,
-    });
+    try {
+      const checkProduct = await this.productModel.findOne({
+        _id: id,
+        active: true,
+      });
 
-    if (!checkProduct) {
-      throw new NotFoundException(`the product ${id} not found`);
+      if (!checkProduct) {
+        throw new NotFoundException(`the product ${id} not found`);
+      }
+      return checkProduct;
+    } catch (error) {
+      throw new Error('error occur on server ');
     }
-    return checkProduct;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    const updateProduct = await this.productModel
-      .findByIdAndUpdate(id, updateProductDto, { new: true })
-      .exec();
+    try {
+      const updateProduct = await this.productModel
+        .findByIdAndUpdate(id, updateProductDto, { new: true })
+        .exec();
 
-    return updateProduct;
+      return updateProduct;
+    } catch (error) {
+      throw new Error('error occur on server ');
+    }
   }
 
   async remove(id: string) {
-    const update = await this.productModel.findByIdAndUpdate(
-      id,
-      { active: false },
-      { new: true },
-    );
+    try {
+      const update = await this.productModel.findByIdAndUpdate(
+        id,
+        { active: false },
+        { new: true },
+      );
 
-    if (update) {
-      return `The product ${id} was successfully deactivated`;
-    } else {
-      throw new NotFoundException(`Product with id ${id} not found`);
+      if (update) {
+        return `The product ${id} was successfully deactivated`;
+      } else {
+        throw new NotFoundException(`Product with id ${id} not found`);
+      }
+    } catch (error) {
+      throw new Error('error occured');
     }
   }
 }
