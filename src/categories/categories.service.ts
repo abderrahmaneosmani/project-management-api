@@ -30,7 +30,7 @@ export class CategoriesService {
     });
 
     if (!checkCategory) {
-      throw new NotFoundException(`the product ${id} not found`);
+      throw new NotFoundException(`the category ${id} not found`);
     }
     return checkCategory;
   }
@@ -48,7 +48,7 @@ export class CategoriesService {
     if (deleteCategory) {
       return `The Category ${id} was successfully deleted`;
     } else {
-      throw new NotFoundException(`Product with id ${id} not found`);
+      throw new NotFoundException(`Category with id ${id} not found`);
     }
   }
 }

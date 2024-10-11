@@ -50,7 +50,12 @@ export class RolesService {
     return updatedRole;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async remove(id: string) {
+    const deleteRole = await this.roleModel.findByIdAndDelete(id);
+    if (deleteRole) {
+      return `The Role ${id} was successfully deleted`;
+    } else {
+      throw new NotFoundException(`Role with id ${id} not found`);
+    }
   }
 }
