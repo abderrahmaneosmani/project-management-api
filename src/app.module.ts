@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ProductsModule,
     CategoriesModule,
     UsersModule,
