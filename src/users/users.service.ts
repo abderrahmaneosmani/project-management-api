@@ -94,5 +94,6 @@ export class UsersService {
     if (!user) {
       throw new Error(`user not found with ${email}`);
     }
+    return user;
   }
 }
