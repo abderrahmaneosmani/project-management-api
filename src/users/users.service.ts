@@ -50,6 +50,7 @@ export class UsersService {
     try {
       const users = await this.userModel.find().populate('role').exec();
       if (!users) throw new Error('error');
+      return users;
     } catch (error) {
       new Error('error on find user by id');
     }
@@ -65,6 +66,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('user not found');
     }
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

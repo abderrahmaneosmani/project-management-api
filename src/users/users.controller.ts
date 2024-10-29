@@ -26,8 +26,8 @@ export class UsersController {
   }
   @Roles(Role.Admin)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
   @Roles(Role.Admin)
   @Get(':id')
